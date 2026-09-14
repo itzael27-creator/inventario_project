@@ -1,0 +1,229 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block titulo %}
+        Inventario
+        {% endblock %}
+    </title>
+
+    <link rel="icon"
+          type="image/png"
+          href="{% static 'inventario/assets/images/favicon.ico' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'inventario/assets/libs/bootstrap/css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'inventario/assets/libs/bootstrap-icons/bootstrap-icons.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'inventario/assets/libs/apexcharts/apexcharts.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'inventario/assets/libs/flatpickr/flatpickr.min.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'inventario/assets/css/main.css' %}">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar-wrapper" id="sidebar">
+
+        <a href="{% url 'dashboard' %}" class="sidebar-brand">
+            <i class="bi bi-box-seam"></i>
+            <span>Inventario</span>
+        </a>
+
+        <div class="flex-grow-1 overflow-y-auto">
+
+            <div class="sidebar-menu-section">
+
+                <div class="sidebar-menu-title">
+                    Menú
+                </div>
+
+                <ul class="sidebar-menu-list">
+
+                    <li class="sidebar-menu-item">
+
+                        <a href="{% url 'dashboard' %}"
+                           class="sidebar-menu-link">
+
+                            <i class="bi bi-grid-fill"></i>
+
+                            <span>Dashboard</span>
+
+                        </a>
+
+                    </li>
+
+                    <li class="sidebar-menu-item">
+
+                        <a href="{% url 'lista_productos' %}"
+                           class="sidebar-menu-link">
+
+                            <i class="bi bi-box"></i>
+
+                            <span>Productos</span>
+
+                        </a>
+
+                    </li>
+
+                    <li class="sidebar-menu-item">
+
+                        <a href="{% url 'crear_producto' %}"
+                           class="sidebar-menu-link">
+
+                            <i class="bi bi-plus-circle"></i>
+
+                            <span>Registrar producto</span>
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+
+        <!-- USUARIO -->
+        <div class="sidebar-profile">
+
+            <div class="sidebar-profile-info">
+
+                <div class="sidebar-profile-name">
+                    {{ request.user.username }}
+                </div>
+
+                <div class="sidebar-profile-email">
+                    Administrador
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-wrapper">
+
+        <!-- NAVBAR -->
+        <header class="navbar-custom">
+
+            <div class="navbar-left">
+
+                <button
+                    class="sidebar-toggle-btn me-2"
+                    id="sidebar-toggle"
+                    aria-label="Toggle Navigation"
+                >
+                    <i class="bi bi-list"></i>
+                </button>
+
+            </div>
+
+
+            <div class="navbar-actions">
+
+                <div class="dropdown ms-2">
+
+                    <button
+                        class="navbar-profile-btn dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                    >
+
+                        <span class="navbar-profile-name d-none d-md-inline">
+                            {{ request.user.username }}
+                        </span>
+
+                        <i class="bi bi-chevron-down navbar-profile-caret"></i>
+
+                    </button>
+
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+
+                        <li class="dropdown-header">
+                            Bienvenido
+                        </li>
+
+                        <li>
+
+                            <form
+                                method="POST"
+                                action="{% url 'logout' %}"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="dropdown-item text-danger"
+                                >
+
+                                    <i class="bi bi-box-arrow-right"></i>
+
+                                    Cerrar sesión
+
+                                </button>
+
+                            </form>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- AQUÍ CAMBIA CADA PÁGINA -->
+        <div class="p-4">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% block contenido %}
+
+            {% endblock %}
+
+        </div>
+
+    </div>
+
+
+    <script src="{% static 'inventario/assets/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="{% static 'inventario/assets/libs/apexcharts/apexcharts.min.js' %}"></script>
+
+    <script src="{% static 'inventario/assets/libs/flatpickr/flatpickr.min.js' %}"></script>
+
+    <script src="{% static 'inventario/assets/js/dashboard.js' %}"></script>
+
+</body>
+
+</html>

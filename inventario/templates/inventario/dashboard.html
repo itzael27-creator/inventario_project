@@ -1,0 +1,93 @@
+
+{% extends 'inventario/base.html' %}
+
+{% block titulo %}Dashboard{% endblock %}
+
+{% block contenido %}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Panel de administración del inventario.</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card card-stat">
+            <div class="card-header">
+                <span class="stat-label">Total de productos</span>
+                <i class="bi bi-box-seam"></i>
+            </div>
+            <div class="stat-value">{{ total_productos }}</div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-stat">
+            <div class="card-header">
+                <span class="stat-label">Productos con stock bajo</span>
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div class="stat-value">{{ stock_bajo }}</div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card alert-green-card">
+            <div class="position-relative z-index-2">
+                <span class="alert-green-badge">Inventario</span>
+                <div class="alert-green-text">Registrar un nuevo producto</div>
+            </div>
+            <a href="{% url 'crear_producto' %}" class="alert-green-link z-index-2">
+                <span>Nuevo producto</span>
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Productos recientes</h2>
+                <a href="{% url 'lista_productos' %}" class="alert-green-link">Ver todos <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos_recientes %}
+                        <tr>
+                            <td>{{ producto.nombre }}</td>
+                            <td>${{ producto.precio }}</td>
+                            <td>
+                                {% if producto.stock <= 5 %}
+                                    <span class="badge bg-danger">{{ producto.stock }}</span>
+                                {% else %}
+                                    <span class="badge bg-success">{{ producto.stock }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ producto.fecha_registro|date:"d/m/Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No hay productos registrados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

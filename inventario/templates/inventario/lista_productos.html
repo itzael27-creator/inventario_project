@@ -1,0 +1,70 @@
+cls 
+<div class="page-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div>
+        <h1 class="page-title">Productos</h1>
+        <p class="page-subtitle">Consulta y administra el inventario registrado.</p>
+    </div>
+    <a href="{% url 'crear_producto' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Registrar producto
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="card-title mb-0">Lista de productos</h2>
+        <span class="text-muted">{{ productos|length }} registrados</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Registrado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.marca }}</td>
+                    <td>${{ producto.precio }}</td>
+                    <td>
+                        <span class="badge {% if producto.stock <= 5 %}bg-danger{% else %}bg-success{% endif %}">
+                            {{ producto.stock }}
+                        </span>
+                    </td>
+                    <td>{{ producto.fecha_registro|date:"d/m/Y" }}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'editar_producto' producto.id %}"
+                               class="btn btn-sm btn-outline-primary"
+                               title="Editar producto">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form method="post"
+                                  action="{% url 'eliminar_producto' producto.id %}"
+                                  onsubmit="return confirm('¿Quieres eliminar este producto?');">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                        title="Eliminar producto">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4">No hay productos registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
